@@ -22,15 +22,20 @@ public class FirstRobot01 extends AdvancedRobot {
 
         while (true) {
             ahead(radius);
-            turnLeft(angle);
-            turnGunLeft(angle);
-            fireBullet(getEnergy());
+            turnRight(angle);
+            turnRadarRight(angle);
         }
     }
 
 
     public void onScannedRobot(ScannedRobotEvent e) {
         setTurnRadarRight(2.0 * Utils.normalRelativeAngleDegrees(getHeading() + e.getBearing() - getRadarHeading()));
+        double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
+        setTurnGunRightRadians(
+                robocode.util.Utils.normalRelativeAngle(absoluteBearing -
+                        getGunHeadingRadians()));
+        fireBullet(3);
+
     }
 
     public void onHitByBullet(HitByBulletEvent e) {
