@@ -4,6 +4,7 @@ import robocode.*
 import robocode.util.Utils
 import java.awt.Color
 import java.awt.geom.Point2D
+import javax.swing.text.html.HTML.Tag.U
 import kotlin.math.*
 
 
@@ -25,6 +26,7 @@ class FirstRobot01 : AdvancedRobot() {
 
         isAdjustGunForRobotTurn = true
         isAdjustRadarForGunTurn = true
+        // isAdjustRadarForRobotTurn = true
 
         setTurnRadarRight(Double.POSITIVE_INFINITY)
         setBulletColor(Color.GREEN)
@@ -37,6 +39,7 @@ class FirstRobot01 : AdvancedRobot() {
                 //setAhead(20.0)
                 //setTurnRadarRight(90.0)
                 execute()
+
             } else {
 
                /* enemyTarget?.let {
@@ -50,16 +53,20 @@ class FirstRobot01 : AdvancedRobot() {
 
                 setFireBullet(4.0)*/
                 execute()
-
-                //fireBullet(4.0)
-                /*turnRadarLeft(10.0)
-                turnRadarRight(20.0)*/
+                enemyTarget = null
             }
-            /*ahead(radius)
-            turnLeft(angle)
-            turnGunRight(5.0)
-            fireBullet(energy)*/
         }
+    }
+
+    override fun onHitRobot(e: HitRobotEvent) {
+        val angleToEnemy = headingRadians + e.bearingRadians
+        var radarTurn = Utils.normalRelativeAngle(angleToEnemy - radarHeadingRadians)
+        setTurnRadarRightRadians(radarTurn)
+        setTurnGunRightRadians(Utils.normalRelativeAngle(angleToEnemy - gunHeadingRadians))
+        //setTurnLeft(e.bearing)
+        //setAhead(100.0)
+        setBack(100.0)
+        execute()
     }
 
     override fun onScannedRobot(e: ScannedRobotEvent) {
@@ -77,12 +84,27 @@ class FirstRobot01 : AdvancedRobot() {
         //fire(1.0)
         enemyTarget = Enemy(0.0 to 0.0, 0.0, 0.0, 0.0)
         setTurnRadarRightRadians(radarTurn)
-        setTurnGunRightRadians(Utils.normalRelativeAngle(angleToEnemy - gunHeadingRadians))
 
-        if (e.distance > 100.0) {
+        var gunTurn = Utils.normalRelativeAngle(angleToEnemy - gunHeadingRadians)
+
+        val enemyX = sin(e.bearingRadians + headingRadians) * e.distance + x
+        val enemyY = cos(e.bearingRadians + headingRadians) * e.distance + y
+        val predictedX = sin(e.headingRadians) * e.velocity + enemyX
+        val predictedY = cos(e.headingRadians) * e.velocity + enemyY
+
+        val angleToPrediction = Utils.normalAbsoluteAngle(
+            atan2(predictedX - x, predictedY - y)
+        )
+
+        setTurnGunRightRadians(Utils.normalRelativeAngle(angleToPrediction - gunHeadingRadians))
+        setFire(Rules.MAX_BULLET_POWER)
+
+        val targetDistance = 128.0
+        if (e.distance > targetDistance) {
+            setTurnRightRadians(e.bearingRadians)
+            setAhead(e.distance - targetDistance)
         }
 
-        setFire(4.0)
         execute()
 
 
