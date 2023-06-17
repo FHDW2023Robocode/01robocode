@@ -13,7 +13,7 @@ data class Enemy(
     val velocity: Double,
 )
 
-class FirstRobot01 : AdvancedRobot() {
+class BadTankAnnihilator : AdvancedRobot() {
     private var enemyTarget: Enemy? = null
 
     private var oldHeading = 0.0
