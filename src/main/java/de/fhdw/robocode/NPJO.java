@@ -6,7 +6,7 @@ import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
 import robocode.AdvancedRobot;
 
-public class FirstRobot01 extends AdvancedRobot {
+public class NPJO extends AdvancedRobot {
 
     @Override
     public void run() {
