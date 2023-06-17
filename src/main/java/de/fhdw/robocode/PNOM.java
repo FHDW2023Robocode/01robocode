@@ -1,16 +1,14 @@
 package de.fhdw.robocode;
 
-import robocode.HitByBulletEvent;
-import robocode.AdvancedRobot;
-import robocode.ScannedRobotEvent;
+import robocode.*;
 import robocode.util.Utils;
 
-public class FirstRobot01 extends AdvancedRobot {
+public class PNOM extends AdvancedRobot {
 
     @Override
     public void run() {
 
-        turnRadarRightRadians(Double.POSITIVE_INFINITY);
+        setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
         do {
             // Check for new targets.
             // Only necessary for Narrow Lock because sometimes our radar is already
@@ -21,7 +19,6 @@ public class FirstRobot01 extends AdvancedRobot {
             ahead(20);
             //setTurnLeft(90)
             setTurnRadarRight(10);
-
         } while (true);
     }
 
@@ -38,7 +35,7 @@ public class FirstRobot01 extends AdvancedRobot {
         setTurnGunRightRadians(
                 robocode.util.Utils.normalRelativeAngle(absoluteBearing -
                         getGunHeadingRadians()));
-        fire(2);
+        fire(3-(getEnergy()/34));
     }
 
     public void onHitByBullet(HitByBulletEvent e) {

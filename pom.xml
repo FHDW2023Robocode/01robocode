@@ -8,11 +8,11 @@
         <!--
             Set this to your robot's name
         -->
-    <artifactId>Robot-04</artifactId>
+    <artifactId>PNOM</artifactId>
         <!--
             Set this to your robot's version
         -->
-    <version>1.0</version>
+    <version>1.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
