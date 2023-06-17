@@ -18,8 +18,6 @@ data class Enemy(
 class FirstRobot01 : AdvancedRobot() {
     private var enemyTarget: Enemy? = null
 
-    private var oldHeading = 0.0
-
     override fun run() {
         val radius = 100.0
         val angle = 90.0
@@ -63,8 +61,6 @@ class FirstRobot01 : AdvancedRobot() {
         var radarTurn = Utils.normalRelativeAngle(angleToEnemy - radarHeadingRadians)
         setTurnRadarRightRadians(radarTurn)
         setTurnGunRightRadians(Utils.normalRelativeAngle(angleToEnemy - gunHeadingRadians))
-        //setTurnLeft(e.bearing)
-        //setAhead(100.0)
         setBack(100.0)
         execute()
     }
@@ -106,61 +102,6 @@ class FirstRobot01 : AdvancedRobot() {
         }
 
         execute()
-
-
-       /* val bulletPower = Math.min(3.0, energy)
-        val myX = x
-        val myY = y
-        val absoluteBearing = headingRadians + e.bearingRadians
-        val enemyX = x + e.distance * Math.sin(absoluteBearing)
-        val enemyY = y + e.distance * Math.cos(absoluteBearing)
-        var enemyHeading = e.headingRadians
-        val enemyHeadingChange: Double = enemyHeading - oldHeading
-        val enemyVelocity = e.velocity
-        oldHeading = enemyHeading
-        enemyTarget = Enemy(0.0 to 0.0, 0.0, 0.0, 0.0)
-
-        var deltaTime = 0.0
-        val battleFieldHeight = battleFieldHeight
-        val battleFieldWidth = battleFieldWidth
-        var predictedX = enemyX
-        var predictedY = enemyY
-        while (++deltaTime * (20.0 - 3.0 * bulletPower) <
-            Point2D.Double.distance(myX, myY, predictedX, predictedY)
-        ) {
-            predictedX += Math.sin(enemyHeading) * enemyVelocity
-            predictedY += Math.cos(enemyHeading) * enemyVelocity
-            enemyHeading += enemyHeadingChange
-            if (predictedX < 18.0 || predictedY < 18.0 || predictedX > battleFieldWidth - 18.0 || predictedY > battleFieldHeight - 18.0) {
-                predictedX = Math.min(
-                    Math.max(18.0, predictedX),
-                    battleFieldWidth - 18.0
-                )
-                predictedY = Math.min(
-                    Math.max(18.0, predictedY),
-                    battleFieldHeight - 18.0
-                )
-                break
-            }
-        }
-        val theta = Utils.normalAbsoluteAngle(
-            Math.atan2(
-                predictedX - x, predictedY - y
-            )
-        )
-
-        setTurnRadarRightRadians(
-            Utils.normalRelativeAngle(
-                absoluteBearing - radarHeadingRadians
-            )
-        )
-        setTurnGunRightRadians(
-            Utils.normalRelativeAngle(
-                theta - gunHeadingRadians
-            )
-        )
-        setFire(3.0)
-        execute()*/
     }
 
     override fun onHitWall(event: HitWallEvent?) {
