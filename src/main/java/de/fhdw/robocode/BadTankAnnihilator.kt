@@ -13,6 +13,8 @@ data class Enemy(
     val velocity: Double,
 )
 
+const val safetyZone = 80.0;
+
 class BadTankAnnihilator : AdvancedRobot() {
     private var enemyTarget: Enemy? = null
 
@@ -29,14 +31,13 @@ class BadTankAnnihilator : AdvancedRobot() {
 
         while (true) {
 
-            val safetyZone = 100.0;
             if (x < safetyZone) {
                 setTurnRight(90.0)
-            } else if(x > battleFieldWidth - safetyZone) {
+            } else if (x > battleFieldWidth - safetyZone) {
                 setTurnLeft(90.0)
-            } else if(y < safetyZone) {
+            } else if (y < safetyZone) {
                 setTurnRight(90.0)
-            } else if(y > battleFieldHeight - safetyZone) {
+            } else if (y > battleFieldHeight - safetyZone) {
                 setTurnLeft(90.0)
             }
 
@@ -74,7 +75,7 @@ class BadTankAnnihilator : AdvancedRobot() {
         var radarTurn = Utils.normalRelativeAngle(angleToEnemy - radarHeadingRadians)
         val extraTurn = min(atan(24 / e.distance), Rules.RADAR_TURN_RATE_RADIANS);
 
-        if (radarTurn < 0){
+        if (radarTurn < 0) {
             radarTurn -= extraTurn
         } else {
             radarTurn += extraTurn
@@ -116,12 +117,44 @@ class BadTankAnnihilator : AdvancedRobot() {
         setFire(bulletPower)
 
         val targetDistance = 128.0
-        if (e.distance > targetDistance) {
+        if (e.distance > targetDistance + 40) {
             setTurnRightRadians(e.bearingRadians)
             setAhead(e.distance - targetDistance)
+        } else if (e.distance < targetDistance - 40) {
+            setTurnRightRadians(e.bearingRadians)
+            setBack(targetDistance - e.distance)
+        } else {
+            var newDirection = Utils.normalRelativeAngle(e.bearingRadians + 0.5 * PI)
+            if (isNearWalls()) {
+                newDirection = moveFromWallAngle() - heading
+            }
+            setTurnRight(Utils.normalRelativeAngleDegrees(newDirection))
+            //setTurnRightRadians(Utils.normalRelativeAngleDegrees(newDirection))
+            setAhead(10.0)
         }
 
         execute()
+    }
+
+    private fun isNearWalls(): Boolean {
+        return x < safetyZone || x > battleFieldWidth - safetyZone ||
+                y < safetyZone || y > battleFieldHeight - safetyZone
+    }
+
+    private fun moveFromWallAngle(): Double {
+        if (x < safetyZone) {
+            return 90.0
+        }
+        if (x > battleFieldWidth - safetyZone) {
+            return 270.0
+        }
+        if (y < safetyZone) {
+            return 0.0
+        }
+        if (y > battleFieldHeight - safetyZone) {
+            return 180.0
+        }
+        return 0.0
     }
 
     override fun onHitWall(event: HitWallEvent?) {
