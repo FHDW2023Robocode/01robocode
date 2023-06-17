@@ -22,9 +22,13 @@ class BadTankAnnihilator : AdvancedRobot() {
         // isAdjustRadarForRobotTurn = true
 
         setTurnRadarRight(Double.POSITIVE_INFINITY)
-        setBulletColor(Color.GREEN)
+        setBulletColor(Color.MAGENTA)
+        setBodyColor(Color.MAGENTA)
+        setRadarColor(Color.CYAN)
+        setScanColor(Color.MAGENTA)
 
         while (true) {
+
             val safetyZone = 100.0;
             if (x < safetyZone) {
                 setTurnRight(90.0)
@@ -123,9 +127,18 @@ class BadTankAnnihilator : AdvancedRobot() {
     override fun onHitWall(event: HitWallEvent?) {
         turnLeft(170.0)
         ahead(10.0)
+        val random = Utils.getRandom()
+        setBodyColor(Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)))
     }
 
     override fun onHitByBullet(e: HitByBulletEvent) {
-        //turnLeft(90 - e.bearing)
+        val random = Utils.getRandom()
+        setBodyColor(Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)))
+    }
+
+    override fun onBulletHit(event: BulletHitEvent) {
+        val random = Utils.getRandom()
+        setBodyColor(Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)))
+        setScanColor(Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)))
     }
 }
