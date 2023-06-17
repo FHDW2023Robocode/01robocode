@@ -22,6 +22,7 @@ public class NPJO extends AdvancedRobot {
 
         while (true) {
             ahead(radius);
+            back()
             turnRight(angle);
             turnRadarRight(angle);
         }
